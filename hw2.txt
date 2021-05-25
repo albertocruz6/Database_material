@@ -1,0 +1,64 @@
+### 1
+select distinct t.TrackId, t.Name
+from  playlists p natural inner join playlist_track pt  join tracks t using(TrackId)
+where not p.Name = 'TV Shows'
+order by t.Name 
+limit 20
+####### 2
+select distinct c.FirstName, c.LastName, c.Address
+from customers c left join invoices i using(CustomerId)
+where i.BillingState is Null
+order by c.FirstName
+######## 3
+with maxSells as(select TrackId, count(*) as allSells from invoices inner natural join invoice_items inner natural join tracks group by TrackId)
+
+select *
+from maxSells join tracks t using(TrackID)
+order by allSells desc
+limit 5
+
+
+2nd try
+with maxSells as(select TrackId, a.Name, Total/UnitPrice as allSells 
+                from invoices i
+                    inner natural join invoice_items it
+                    inner natural join tracks t
+                    inner natural join albums ab
+                    inner natural join artists a
+                )
+
+select *
+from maxSells
+order by allSells desc
+limit 5
+
+
+select a.Name, sum(it.UnitPrice) as q, 
+from tracks t, albums ab, artists a, invoice_items it, invoices i
+where t.AlbumId = ab.AlbumId and ab.ArtistId = a.ArtistId
+and it.TrackId = t.TrackId 
+group by a.Name
+order by q desc
+limit 5
+######
+select A.Name, sum(I.Quantity*T.UnitPrice) as best
+from artists as A, albums as B, tracks as T, invoice_items as I
+where A.ArtistId = B.ArtistId and B.AlbumId = T.AlbumId and T.TrackId = I.TrackId
+group by A.Name order by best desc limit 5;
+
+
+
+
+######
+select t.Name, t.Composer
+from tracks t join genres g using(GenreId)
+where g.Name = 'Jazz'
+order by t.Name
+limit 10
+
+#####
+
+What is a disadvantage of the tape storage device?
+
+
+Data access is slower than others because of the sequential access that is requiere to retrieve data from these devices. 
